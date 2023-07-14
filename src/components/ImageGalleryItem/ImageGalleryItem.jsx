@@ -26,8 +26,12 @@ class ImageGalleryItem extends Component {
     );
   }
 }
+
 ImageGalleryItem.propTypes = {
-  item: PropTypes.object,
+  item: PropTypes.shape({
+    webformatURL: PropTypes.string.isRequired,
+    tags: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default ImageGalleryItem;

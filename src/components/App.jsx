@@ -8,7 +8,7 @@ import Loader from './Loader/Loader';
 
 export class App extends Component {
   state = {
-    query: '',
+    query: null,
     page: 1,
     items: [],
     status: 'idle',
@@ -21,21 +21,19 @@ export class App extends Component {
       prevState.page !== this.state.page
     ) {
       const response = await fetchImages(this.state.query, this.state.page);
-      if (response.hits.length === 0) {
-        Notiflix.Notify.warning('Please fill search text');
-      } else {
-        this.setState(prevState => ({
-          items: [...prevState.items, ...response.hits],
-          status: 'resolved',
-          totalHits: response.totalHits,
-        }));
-      }
+      this.setState(prevState => ({
+        items: [...prevState.items, ...response.hits],
+        status: 'resolved',
+        totalHits: response.totalHits,
+      }));
     }
   }
 
   onSubmit = query => {
     if (this.state.query === query) {
       return Notiflix.Notify.warning(`You are already watching "${query}"`);
+    } else if (query === '') {
+      return Notiflix.Notify.warning('Please enter a search text');
     }
     this.setState({
       query: query.toLowerCase(),
